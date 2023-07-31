@@ -10,7 +10,7 @@ apiRoute.post(
   ) => {
     const { event_type: eventType, repo } = req.query;
     try {
-      if (!eventType) {
+      if (!eventType || !req.headers.authorization) {
         throw new Error('event_type param missing');
       }
       if (!repo) {
@@ -27,7 +27,7 @@ apiRoute.post(
           method: 'post',
           headers: new Headers({
             Accept: 'application/vnd.github.v3+json',
-            Authorization: `token ${process.env.GITHUB_TOKEN}`,
+            Authorization: req.headers.authorization,
             ContentType: 'application/json',
           }),
           body: JSON.stringify({
