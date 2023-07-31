@@ -10,11 +10,14 @@ apiRoute.post(
   ) => {
     const { event_type: eventType, repo } = req.query;
     try {
-      if (!eventType || !req.headers.authorization) {
+      if (!eventType) {
         throw new Error('event_type param missing');
       }
       if (!repo) {
         throw new Error('repo param missing');
+      }
+      if (!req.headers.authorization) {
+        throw new Error('authorization header missing');
       }
     } catch (e) {
       return res.status(400).send(e.message);
